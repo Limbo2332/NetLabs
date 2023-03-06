@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dxuzDzh/nNDt3/ECgAquvAyoOojPku5TRFNNJXbYta6c+ht6tANkXNHqIhhk6AjDV6KOB4yuQMrNf7qtEPaWKQ==",
+  "dgSpecHash": "hYlh380qd1uhC4DoVCYDSZTxrX47GSMJmLNvw/UW88xQuZKuohpWCLzj/04PstLbIvpLzFo0Ea0/ZmsCNUq3aQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
+  "projectFilePath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\Lab1\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Main\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\Main\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"

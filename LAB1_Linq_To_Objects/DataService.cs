@@ -6,31 +6,6 @@ namespace LAB1_Linq_To_Objects
 {
     class DataService : IDataService
     {
-        public DataService()
-        {
-            foreach (var rental in DataContext.Rentals)
-            {
-                foreach (var payment in rental.Payments)
-                {
-                    payment.Rental = rental;
-                }
-            }
-            foreach (var car in DataContext.Cars)
-            {
-                foreach (var rental in car.Rentals)
-                {
-                    rental.Car = car;
-                }
-            }
-
-            foreach (var customer in DataContext.Customers)
-            {
-                foreach (var rental in customer.Rentals)
-                {
-                    rental.Customer = customer;
-                }
-            }
-        }
         public void PrintName(string text)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -132,13 +107,11 @@ namespace LAB1_Linq_To_Objects
 
             var q7 = from c in DataContext.Customers
                      from r in DataContext.Rentals
-                     where c.Rentals != null
-                     from q in c.Rentals
-                     where q == r
+                     where r.Customer_Id == c.Id
                      select new
                      {
                          Name = c.Name,
-                         Sum = q.DepositSum
+                         Sum = r.DepositSum
                      };
 
             foreach (var result in q7)
@@ -172,7 +145,7 @@ namespace LAB1_Linq_To_Objects
         {
             PrintName("10. Використання Join. Вивести для машини конкретного року випуску дату її прокатiв.");
 
-            var q10 = DataContext.Rentals.Join(DataContext.Cars, r => r.Car.Id, c => c.Id,
+            var q10 = DataContext.Rentals.Join(DataContext.Cars, r => r.Car_Id, c => c.Id,
                 (r, c) => new { StartDate = r.StartDate, EndDate = r.EndDate, Year = c.YearOfManufacture });
 
             foreach (var result in q10)
@@ -185,7 +158,7 @@ namespace LAB1_Linq_To_Objects
         {
             PrintName("11. Використання GroupJoin. Вивести модель машини та всi суми, якi були заплаченi по угодi прокату");
 
-            var q11 = DataContext.Cars.GroupJoin(DataContext.Rentals, c => c.Id, r => r.Car.Id, (c, rentals) => new
+            var q11 = DataContext.Cars.GroupJoin(DataContext.Rentals, c => c.Id, r => r.Car_Id, (c, rentals) => new
             {
                 Model = c.Model,
                 Rentals = rentals
@@ -237,11 +210,16 @@ namespace LAB1_Linq_To_Objects
         {
             PrintName("15. Знайти колекцiю платежiв, якi були здiйсненi пiд час угоди прокату");
 
-            var q15 = DataContext.Payments.Where(p => (p.Rental.StartDate < p.Date && p.Date > p.Rental.EndDate));
+            var q15 = DataContext.Payments.Join(DataContext.Rentals, p => p.Rental_Id, r => r.Id, (p, r) => new
+            {
+                StartDate = r.StartDate,
+                EndDate = r.EndDate,
+                Date = p.Date,
+            }).Where(p => p.StartDate < p.Date && p.EndDate > p.Date);
 
             foreach (var payment in q15)
             {
-                Console.WriteLine(payment);
+                Console.WriteLine($"{payment.StartDate:d} - {payment.Date:d} - {payment.EndDate:d}");
             }
         }
 
@@ -249,14 +227,17 @@ namespace LAB1_Linq_To_Objects
         {
             PrintName("16. Вивести машину та iм'я клiєнту, який брав її у прокат");
 
-            var q16 = DataContext.Cars.Join(DataContext.Customers, car => car.Rentals, customer => customer.Rentals, (car, customer) => new
-            {
-                Model = car.Model,
-                Color = car.Color,
-                Name = customer.Name,
-            }, new DataEqualityComparer());
+            var q16 = from rental in DataContext.Rentals
+                      join car in DataContext.Cars on rental.Car_Id equals car.Id
+                      join customer in DataContext.Customers on rental.Customer_Id equals customer.Id
+                      select new 
+                      {
+                          Model = car.Model,
+                          Color = car.Color,
+                          Name = customer.Name,
+                      };
 
-            foreach (var result in q16)
+            foreach (var result in q16.Distinct(new AnonimEqualityComparer<dynamic>((x, y) => x.Name == y.Name)))
             {
                 Console.WriteLine($"{result.Name} брав у прокат машину моделi {result.Model} кольору {result.Color}");
             }
@@ -294,9 +275,9 @@ namespace LAB1_Linq_To_Objects
 
         public void UseSelectMany()
         {
-            PrintName("20. Використання SelectMany. Вибiрка усiх угод прокату клiєнтiв. ");
+            PrintName("20. Використання Reverse. Перевернути колекцію клієнтів.");
 
-            var q20 = DataContext.Customers.SelectMany(c => c.Rentals);
+            var q20 = DataContext.Customers.Reverse();
 
             foreach (var result in q20)
             {

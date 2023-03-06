@@ -110,11 +110,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
+      "projectUniqueName": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\Lab1\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
       "projectName": "LAB1_Linq_To_Objects",
-      "projectPath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
+      "projectPath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\Lab1\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects.csproj",
       "packagesPath": "C:\\Users\\Main\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\obj\\",
+      "outputPath": "C:\\Users\\Main\\Desktop\\study\\4 term\\.NET\\Лаби\\Lab1\\LAB1_Linq_To_Objects\\LAB1_Linq_To_Objects\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Main\\AppData\\Roaming\\NuGet\\NuGet.Config",

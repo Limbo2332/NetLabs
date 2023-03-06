@@ -8,8 +8,8 @@
         public decimal DepositSum { get; set; } 
 
         public ICollection<Payment> Payments { get; set; }
-        public Customer Customer { get; set; }
-        public Car Car { get; set; }
+        public int Customer_Id { get; set; }
+        public int Car_Id { get; set; }
 
         public override string ToString()
         {

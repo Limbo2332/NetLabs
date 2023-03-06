@@ -9,7 +9,7 @@ namespace LAB1_Linq_To_Objects.Classes
         public decimal Sum { get; set; }
         public DateTime Date { get; set; }
         
-        public Rental Rental { get; set; }
+        public int Rental_Id { get; set; }
 
         public override string ToString()
         {

@@ -1,32 +1,25 @@
 ﻿using LAB1_Linq_To_Objects.Classes;
+using LAB1_Linq_To_Objects.Enums;
 using System.Diagnostics.CodeAnalysis;
 
 namespace LAB1_Linq_To_Objects
 {
-    class DataEqualityComparer : IEqualityComparer<ICollection<Rental>>
+    class AnonimEqualityComparer<T> : IEqualityComparer<T>
     {
-        public bool Equals(ICollection<Rental>? x, ICollection<Rental>? y)
+        private readonly Func<T, T, bool> _comparerFunc;
+        public AnonimEqualityComparer(Func<T, T, bool> comparerFunc)
         {
-            bool result = true;
-            foreach (var xElement in x)
-            {
-                result &= xElement.Equals(y.FirstOrDefault(el => el.Id == xElement.Id));
-            }
-
-            return result;
+            _comparerFunc = comparerFunc;
         }
 
-        public int GetHashCode([DisallowNull] ICollection<Rental> obj)
+        public bool Equals(T x, T y)
         {
-            unchecked
-            {
-                int hash = 19;
-                foreach (var foo in obj)
-                {
-                    hash = hash * 31 + foo.Id.GetHashCode();
-                }
-                return hash;
-            }
+            return _comparerFunc(x, y);
+        }
+
+        public int GetHashCode(T obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }
