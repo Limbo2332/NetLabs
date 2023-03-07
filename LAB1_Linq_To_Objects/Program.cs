@@ -12,6 +12,7 @@ namespace LAB1_Linq_To_Objects
         {
             IServiceCollection services = new ServiceCollection();
 
+            //TODO: Invoke sturtup class by default methods 
             Startup startup = new Startup();
             startup.ConfigureServices(services);
 

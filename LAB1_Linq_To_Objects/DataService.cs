@@ -6,283 +6,215 @@ namespace LAB1_Linq_To_Objects
 {
     class DataService : IDataService
     {
-        public void PrintName(string text)
+        private IDataContext _dataContext;
+        public DataService(IDataContext dataContext)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(text);
-            Console.ForegroundColor = ConsoleColor.Gray;
+            _dataContext = dataContext;
         }
 
-        public void GetCustomers()
+        public IEnumerable<Customer> GetCustomers()
         {
-            PrintName("1. Проста вибiрка. Отримати колекцiю всiх клiєнтiв");
-
-            var q1 = from c in DataContext.Customers
+            var q1 = from c in _dataContext.Customers
                      select c;
 
-            foreach (var customer in q1)
-            {
-                Console.WriteLine(customer.ToString());
-            }
+            return q1;
         }
 
-        public void GetCarsAfter2010()
+        public IEnumerable<Car> GetCarsAfter(int year = 2010)
         {
-            PrintName("2. Фiльтрацiя. Отримати колекцiю автомобiлiв, випущених пiсля 2010 року");
-
-            var q2 = from c in DataContext.Cars
-                     where c.YearOfManufacture > 2010
+            var q2 = from c in _dataContext.Cars
+                     where c.YearOfManufacture > year
                      select c;
-
-            foreach (var car in q2)
-            {
-                Console.WriteLine(car.ToString());
-            }
+            return q2;
         }
 
-        public void GroupCarsByModel()
+        public IEnumerable<IGrouping<CarModel, Car>> GroupCarsByModel()
         {
-            PrintName("3. Групування. Отримати групи автомобiлiв, за їх моделлю");
-
-            var q3 = from c in DataContext.Cars
+            var q3 = from c in _dataContext.Cars
                      group c by c.Model;
 
-            foreach (var carModel in q3)
-            {
-                Console.WriteLine(carModel.Key + ":");
-
-                foreach (var value in carModel)
-                {
-                    Console.WriteLine("\t" + value);
-                }
-            }
+            return q3;
         }
 
-        public void SortCarsByMileage()
+        public IEnumerable<Car> SortCarsByMileage()
         {
-            PrintName("4. Сортування. Вiдсортувати автомобiлi за пробiгом, в разi рiвностi - за роком виготовлення");
-
-            var q4 = from c in DataContext.Cars
+            var q4 = from c in _dataContext.Cars
                      orderby c.Mileage, c.YearOfManufacture
                      select c;
-
-            foreach (var car in q4)
-            {
-                Console.WriteLine(car + $" Пробiг: {car.Mileage} км");
-            }
+            return q4;
         }
 
-        public void FindAllRentals2022()
+        public IEnumerable<Rental> FindAllRentalsIn(int year = 2022)
         {
-            PrintName("5. Фiльтрацiя та сортування. Знайти всi угоди прокатiв, якi розпочалися в 2022 роцi та вiдсортувати їх за датою");
-
-            var q5 = from r in DataContext.Rentals
-                     where r.StartDate.Year == 2022
+            var q5 = from r in _dataContext.Rentals
+                     where r.StartDate.Year == year
                      orderby r.StartDate, r.EndDate
                      select r;
-
-            foreach (var rental in q5)
-            {
-                Console.WriteLine(rental);
-            }
+            return q5;
         }
 
-        public void DecartMultiply()
+        public IEnumerable<TempClassForDecart> DecartMultiply()
         {
-            PrintName("6. Декартовий добуток. Знайти декартовий добуток колекцiй Rental та Payment");
+            var q6 = from r in _dataContext.Rentals
+                     from p in _dataContext.Payments
+                     select new TempClassForDecart{ StartDate = r.StartDate, EndDate = r.EndDate, Sum = p.Sum };
 
-            var q6 = from r in DataContext.Rentals
-                     from p in DataContext.Payments
-                     select new { StartDate = r.StartDate, EndDate = r.EndDate, Sum = p.Sum };
-
-            foreach (var result in q6)
-            {
-                Console.WriteLine($"{result.StartDate:d} {result.EndDate:d} {result.Sum}");
-            }
+            return q6;
         }
 
-        public void InnerJoin()
+        public IEnumerable<TempClassForInnerJoin> InnerJoin()
         {
-            PrintName("7. Inner Join. Знайти inner join з'єднання колекцiй Customers i Rentals та вивести пару значень: iм'я клiєнта та суму його платежу");
-
-            var q7 = from c in DataContext.Customers
-                     from r in DataContext.Rentals
-                     where r.Customer_Id == c.Id
-                     select new
+            var q7 = from c in _dataContext.Customers
+                     from r in _dataContext.Rentals
+                     where r.CustomerId == c.Id
+                     select new TempClassForInnerJoin
                      {
                          Name = c.Name,
                          Sum = r.DepositSum
                      };
-
-            foreach (var result in q7)
-            {
-                Console.WriteLine($"{result.Name} {result.Sum}");
-            }
+            return q7;
         }
 
-        public void SumMoney()
+        public decimal SumMoney()
         {
-            PrintName("8. Використання Sum. Вивести суму зароблених коштiв з платежiв користувачiв");
-
-            var q8 = DataContext.Payments.Sum(x => x.Sum);
-
-            Console.WriteLine(q8);
+            var q8 = _dataContext.Payments.Sum(x => x.Sum);
+            return q8;
         }
 
-        public void UseSkip()
+        public IEnumerable<Customer> UseSkip(int index = 2)
         {
-            PrintName("9. Використання Skip. Вивести колекцiю користувачiв, починаючи з 2 iндексу");
-
-            var q9 = DataContext.Customers.Skip(2);
-
-            foreach (var customer in q9)
-            {
-                Console.WriteLine(customer);
-            }
+            var q9 = _dataContext.Customers.Skip(index);
+            return q9;
         }
 
-        public void UseJoin()
+        public IEnumerable<TempClassForJoin> UseJoin()
         {
-            PrintName("10. Використання Join. Вивести для машини конкретного року випуску дату її прокатiв.");
-
-            var q10 = DataContext.Rentals.Join(DataContext.Cars, r => r.Car_Id, c => c.Id,
-                (r, c) => new { StartDate = r.StartDate, EndDate = r.EndDate, Year = c.YearOfManufacture });
-
-            foreach (var result in q10)
-            {
-                Console.WriteLine($"Машина року випуску {result.Year} мала прокат вiд {result.StartDate:d} до {result.EndDate:d}");
-            }
+            var q10 = _dataContext.Rentals.Join(_dataContext.Cars, r => r.CarId, c => c.Id,
+                (r, c) => new TempClassForJoin{ StartDate = r.StartDate, EndDate = r.EndDate, Year = c.YearOfManufacture });
+            return q10;
         }
 
-        public void UseGroupJoin()
+        public IEnumerable<TempClassForGroupJoin> UseGroupJoin()
         {
-            PrintName("11. Використання GroupJoin. Вивести модель машини та всi суми, якi були заплаченi по угодi прокату");
-
-            var q11 = DataContext.Cars.GroupJoin(DataContext.Rentals, c => c.Id, r => r.Car_Id, (c, rentals) => new
+            var q11 = _dataContext.Cars.GroupJoin(_dataContext.Rentals, c => c.Id, r => r.CarId, (c, rentals) => 
+            new TempClassForGroupJoin
             {
                 Model = c.Model,
                 Rentals = rentals
             });
-
-            foreach (var result in q11)
-            {
-                Console.Write($"Машина моделi {result.Model}: ");
-
-                foreach (var rental in result.Rentals)
-                {
-                    Console.Write(rental.DepositSum + ", ");
-                }
-                Console.WriteLine();
-            }
+            return q11;
         }
-        public void UseConcatAndDitinct()
+        public IEnumerable<Car> UseConcatAndDitinct(CarModel model = CarModel.Volkswagen, decimal mileage = 20000) 
         {
-            PrintName("12. Використання Concat/Distinct. Вивести машини, модель яких \"Volkswagen\" або тих, в яких прокат бiльше 20000 км.");
-
-            var q12 = DataContext.Cars.Where(c => c.Model == CarModel.Volkswagen)
-                            .Concat(DataContext.Cars.Where(c => c.Mileage > 20000)).Distinct();
-
-            foreach (var car in q12)
-            {
-                Console.WriteLine(car + " Прокат: " + car.Mileage + " км.");
-            }
+            var q12 = _dataContext.Cars.Where(c => c.Model == model)
+                            .Concat(_dataContext.Cars.Where(c => c.Mileage > mileage)).Distinct();
+            return q12;
         }
 
-        public void UseAll()
+        public bool UseAll()
         {
-            PrintName("13. Використання All. Чи всi машини були виготовленi до 2021 року. ");
-
-            var q13 = DataContext.Cars.All(c => c.YearOfManufacture < 2021);
-
-            Console.WriteLine(q13);
+            var q13 = _dataContext.Cars.All(c => c.YearOfManufacture < 2021);
+            return q13;
         }
 
-        public void FirstWithLastNameStartedVasylenko()
+        public Customer? FirstWithLastNameStartedWith(string name = "Василенко")
         {
-            PrintName("14. Використання FirstOrDefault. Чи є хоча б один клiєнт, прiзвище якого \"Василенко\"");
-
-            var q14 = DataContext.Customers.FirstOrDefault(x => x.Name.StartsWith("Василенко"));
-
-            Console.WriteLine(q14);
+            var q14 = _dataContext.Customers.FirstOrDefault(x => x.Name!.StartsWith(name));
+            return q14;
         }
 
-        public void FindPaymentsInDate()
+        public IEnumerable<TempClassForPaymentsInDate> FindPaymentsInDate()
         {
-            PrintName("15. Знайти колекцiю платежiв, якi були здiйсненi пiд час угоди прокату");
-
-            var q15 = DataContext.Payments.Join(DataContext.Rentals, p => p.Rental_Id, r => r.Id, (p, r) => new
+            var q15 = _dataContext.Payments.Join(_dataContext.Rentals, p => p.RentalId, r => r.Id, (p, r) => 
+            new TempClassForPaymentsInDate
             {
                 StartDate = r.StartDate,
                 EndDate = r.EndDate,
                 Date = p.Date,
             }).Where(p => p.StartDate < p.Date && p.EndDate > p.Date);
-
-            foreach (var payment in q15)
-            {
-                Console.WriteLine($"{payment.StartDate:d} - {payment.Date:d} - {payment.EndDate:d}");
-            }
+            return q15;
         }
 
-        public void FindOwnerOfCar()
+        public IEnumerable<TempClassForOwners> FindOwnerOfCar()
         {
-            PrintName("16. Вивести машину та iм'я клiєнту, який брав її у прокат");
-
-            var q16 = from rental in DataContext.Rentals
-                      join car in DataContext.Cars on rental.Car_Id equals car.Id
-                      join customer in DataContext.Customers on rental.Customer_Id equals customer.Id
-                      select new 
+            var q16 = (from rental in _dataContext.Rentals
+                      join car in _dataContext.Cars on rental.CarId equals car.Id
+                      join customer in _dataContext.Customers on rental.CustomerId equals customer.Id
+                      select new TempClassForOwners
                       {
                           Model = car.Model,
                           Color = car.Color,
                           Name = customer.Name,
-                      };
+                      }).Distinct(new AnonimEqualityComparer());
 
-            foreach (var result in q16.Distinct(new AnonimEqualityComparer<dynamic>((x, y) => x.Name == y.Name)))
-            {
-                Console.WriteLine($"{result.Name} брав у прокат машину моделi {result.Model} кольору {result.Color}");
-            }
+            return q16;
         }
 
-        public void AverageYearOfCars()
+        public double AverageYearOfCars()
         {
-            PrintName("17. Використання Average. Вивести середнiй рiк виготовлення машин");
-
-            var q17 = DataContext.Cars.Average(c => c.YearOfManufacture);
-
-            Console.WriteLine(q17);
+            var q17 = _dataContext.Cars.Average(c => c.YearOfManufacture);
+            return q17;
         }
 
-        public void MaxSum()
+        public decimal MaxSum()
         {
-            PrintName("18. Використання Max. Знайти максимальну суму, яку отримував автопарк за прокат машини");
-
-            var q18 = DataContext.Rentals.Max(r => r.DepositSum);
-
-            Console.WriteLine(q18);
+            var q18 = _dataContext.Rentals.Max(r => r.DepositSum);
+            return q18;
         }
 
-        public void FindCarOneColor()
+        public IEnumerable<TempClassForCarsOneColor> FindCarOneColor()
         {
-            PrintName("19. Вивести кiлькiсть машин одного кольору, якi знаходяться на прокатi.");
-
-            var q19 = DataContext.Cars.GroupBy(c => c.Color).Select(c => new { Model = c.Key, Count = c.Count() });
-
-            foreach (var result in q19)
-            {
-                Console.WriteLine($"{result.Model} - {result.Count}");
-            }
+            var q19 = _dataContext.Cars.GroupBy(c => c.Color).Select(c => 
+                new TempClassForCarsOneColor { Color = c.Key, Count = c.Count() 
+            });
+            return q19;
         }
 
-        public void UseSelectMany()
+        public IEnumerable<Customer> UseSelectMany()
         {
-            PrintName("20. Використання Reverse. Перевернути колекцію клієнтів.");
-
-            var q20 = DataContext.Customers.Reverse();
-
-            foreach (var result in q20)
-            {
-                Console.WriteLine(result);
-            }
+            var q20 = _dataContext.Customers.Reverse();
+            return q20;
         }
+
+    }
+    public class TempClassForDecart
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal Sum { get; set; }
+    }
+    public class TempClassForInnerJoin
+    {
+        public string? Name { get; set; }
+        public decimal Sum { get; set; }
+    }
+
+    public class TempClassForJoin
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int Year { get; set; }
+    }
+    public class TempClassForGroupJoin
+    {
+        public CarModel Model { get; set; }
+        public IEnumerable<Rental>? Rentals { get; set; }
+    }
+    public class TempClassForPaymentsInDate
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime Date { get; set; }
+    }
+    public class TempClassForOwners
+    {
+        public CarModel Model { get; set; }
+        public CarBodyColor Color { get; set; }
+        public string? Name { get; set; }
+    }
+    public class TempClassForCarsOneColor
+    {
+        public CarBodyColor Color { get; set; }
+        public int Count { get; set; }
     }
 }

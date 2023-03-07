@@ -1,6 +1,6 @@
 ﻿namespace LAB1_Linq_To_Objects.Enums
 {
-    enum CarModel
+    public enum CarModel
     {
         Skoda,
         Volkswagen,

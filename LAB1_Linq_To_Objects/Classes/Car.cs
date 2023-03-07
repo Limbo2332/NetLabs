@@ -9,9 +9,7 @@ namespace LAB1_Linq_To_Objects.Classes
         public int YearOfManufacture { get; set; }
         public CarType Type { get; set; }
         public CarBodyColor Color { get; set; }
-        public double Mileage { get; set; }
-
-        public ICollection<Rental> Rentals { get; set; }
+        public decimal Mileage { get; set; }
 
         public override string ToString()
         {

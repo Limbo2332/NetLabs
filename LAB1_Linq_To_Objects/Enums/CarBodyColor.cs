@@ -1,6 +1,6 @@
 ﻿namespace LAB1_Linq_To_Objects.Enums
 {
-    enum CarBodyColor
+    public enum CarBodyColor
     {
         Red,
         Green,

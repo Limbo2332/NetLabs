@@ -11,8 +11,10 @@ namespace LAB1_Linq_To_Objects
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDataService, DataService>();
-            services.AddTransient<Runner>();
+            services.AddSingleton<IDataContext, DataContext>();
+            //services.AddSingleton<IPriceCalculator, PriceCalculator>();
+            services.AddSingleton<IDataService, DataService>();
+            services.AddSingleton<Runner>();
         }
 
         // Transient - при кожному зверненні до сервісу створюється новий об'єкт

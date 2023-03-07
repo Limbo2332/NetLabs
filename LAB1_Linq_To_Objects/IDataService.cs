@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LAB1_Linq_To_Objects.Classes;
+using LAB1_Linq_To_Objects.Enums;
 
 namespace LAB1_Linq_To_Objects
 {
     interface IDataService
     {
-        public void GetCustomers();
-        public void GetCarsAfter2010();
-        public void GroupCarsByModel();
-        public void SortCarsByMileage();
-        public void FindAllRentals2022();
-        public void DecartMultiply();
-        public void InnerJoin();
-        public void SumMoney();
-        public void UseSkip();
-        public void UseJoin();
-        public void UseGroupJoin();
-        public void UseConcatAndDitinct();
-        public void UseAll();
-        public void FirstWithLastNameStartedVasylenko();
-        public void FindPaymentsInDate();
-        public void FindOwnerOfCar();
-        public void AverageYearOfCars();
-        public void MaxSum();
-        public void FindCarOneColor();
-        public void UseSelectMany();
+        public IEnumerable<Customer> GetCustomers();
+        public IEnumerable<Car> GetCarsAfter(int year = 2010);
+        public IEnumerable<IGrouping<CarModel, Car>> GroupCarsByModel();
+        public IEnumerable<Car> SortCarsByMileage();
+        public IEnumerable<Rental> FindAllRentalsIn(int year = 2022);
+        public IEnumerable<TempClassForDecart> DecartMultiply();
+        public IEnumerable<TempClassForInnerJoin> InnerJoin();
+        public decimal SumMoney();
+        public IEnumerable<Customer> UseSkip(int index = 2);
+        public IEnumerable<TempClassForJoin> UseJoin();
+        public IEnumerable<TempClassForGroupJoin> UseGroupJoin();
+        public IEnumerable<Car> UseConcatAndDitinct(CarModel model = CarModel.Volkswagen, decimal mileage = 20000);
+        public bool UseAll();
+        public Customer? FirstWithLastNameStartedWith(string name = "Василенко");
+        public IEnumerable<TempClassForPaymentsInDate> FindPaymentsInDate();
+        public IEnumerable<TempClassForOwners> FindOwnerOfCar();
+        public double AverageYearOfCars();
+        public decimal MaxSum();
+        public IEnumerable<TempClassForCarsOneColor> FindCarOneColor();
+        public IEnumerable<Customer> UseSelectMany();
 
     }
 }
