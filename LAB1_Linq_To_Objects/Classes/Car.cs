@@ -2,7 +2,7 @@
 
 namespace LAB1_Linq_To_Objects.Classes
 {
-    class Car
+    public class Car
     {
         public int Id { get; set; }
         public CarModel Model { get; set; }

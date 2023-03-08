@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LAB1_Linq_To_Objects.Enums
 {
-    enum CarType
+    public enum CarType
     {
         PassengerCar,
         Bus

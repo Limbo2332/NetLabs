@@ -4,5 +4,6 @@
     {
         Danger, 
         NameOfQuery,
+        Default
     }
 }

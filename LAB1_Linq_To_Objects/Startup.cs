@@ -12,8 +12,8 @@ namespace LAB1_Linq_To_Objects
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDataContext, DataContext>();
-            //services.AddSingleton<IPriceCalculator, PriceCalculator>();
-            services.AddSingleton<IDataService, DataService>();
+            services.AddTransient<IDataService, DataService>();
+            services.AddTransient<IDictionaryLogic, DictionaryLogic>();
             services.AddSingleton<Runner>();
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace LAB1_Linq_To_Objects.Classes
 {
-    class Customer
+    public class Customer
     {
         public int Id { get; set; }
         public string? Name { get; set; }

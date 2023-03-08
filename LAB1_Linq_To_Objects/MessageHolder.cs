@@ -18,6 +18,9 @@ namespace LAB1_Linq_To_Objects
                 case MessageType.NameOfQuery:
                     Console.ForegroundColor = ConsoleColor.Green;
                     break;
+                case MessageType.Default:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
             }
             Console.WriteLine(message + "\n");
             Console.ForegroundColor = ConsoleColor.Gray;

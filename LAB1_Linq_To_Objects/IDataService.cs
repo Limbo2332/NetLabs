@@ -1,5 +1,6 @@
 ﻿using LAB1_Linq_To_Objects.Classes;
 using LAB1_Linq_To_Objects.Enums;
+using LAB1_Linq_To_Objects.TempClasses;
 
 namespace LAB1_Linq_To_Objects
 {
@@ -17,10 +18,10 @@ namespace LAB1_Linq_To_Objects
         public IEnumerable<TempClassForJoin> UseJoin();
         public IEnumerable<TempClassForGroupJoin> UseGroupJoin();
         public IEnumerable<Car> UseConcatAndDitinct(CarModel model = CarModel.Volkswagen, decimal mileage = 20000);
-        public bool UseAll();
+        public bool UseAll(int year = 2021);
         public Customer? FirstWithLastNameStartedWith(string name = "Василенко");
         public IEnumerable<TempClassForPaymentsInDate> FindPaymentsInDate();
-        public IEnumerable<TempClassForOwners> FindOwnerOfCar();
+        public IEnumerable<CarCustomer> FindOwnerOfCar();
         public double AverageYearOfCars();
         public decimal MaxSum();
         public IEnumerable<TempClassForCarsOneColor> FindCarOneColor();
